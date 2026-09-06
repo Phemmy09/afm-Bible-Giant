@@ -291,6 +291,43 @@ class ClassicalSoundEngine {
       this.playTone(1174.66, 2.5, 'sine', 0, 0.3);
     }, 4850);
   }
+
+  // 12. 50:50 Grace Elimination Laser Strike Sound
+  playLaser() {
+    this.init();
+    if (this.isMuted || !this.ctx) return;
+    try {
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(1400, now);
+      osc.frequency.exponentialRampToValueAtTime(180, now + 0.35);
+      
+      gain.gain.setValueAtTime(0.28, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      
+      osc.connect(gain);
+      gain.connect(this.masterGain);
+      osc.start(now);
+      osc.stop(now + 0.36);
+    } catch(e) {}
+  }
+
+  // 13. Youth Congregation / Audience Ovation Simulation
+  playApplause() {
+    this.init();
+    if (this.isMuted || !this.ctx) return;
+    try {
+      // Harmonic celebratory ovation chords
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+      notes.forEach((f, i) => {
+        this.playTone(f, 1.8, 'sine', i * 0.08, 0.18);
+        this.playTone(f * 1.5, 1.5, 'triangle', i * 0.08 + 0.1, 0.12);
+      });
+    } catch(e) {}
+  }
 }
 
 export const classicalAudio = new ClassicalSoundEngine();

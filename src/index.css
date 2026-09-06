@@ -3,124 +3,222 @@
 @layer base {
   :root {
     --gold-primary: #D4AF37;
+    --gold-light: #FBF4D4;
     --gold-bright: #F6E084;
-    --navy-deep: #060B19;
-    --navy-mid: #0D1B3E;
+    --gold-dark: #9A7B1C;
+    --gold-metallic: linear-gradient(135deg, #FFF9D2 0%, #D4AF37 50%, #8A6714 100%);
+    
+    --navy-deep: #030712;
+    --navy-surface: #0A132C;
+    --navy-mid: #0E1D44;
+    --navy-glow: rgba(14, 29, 68, 0.7);
+
     --crimson-deep: #800020;
+    --crimson-bright: #E11D48;
+    
+    --cyan-glow: #06B6D4;
+    --emerald-glow: #10B981;
   }
 
   body {
-    background-color: #060B19;
+    background-color: #030712;
     background-image: 
-      radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.12) 0%, transparent 60%),
-      radial-gradient(circle at 100% 100%, rgba(128, 0, 32, 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 0% 100%, rgba(13, 27, 62, 0.3) 0%, transparent 50%);
+      radial-gradient(circle at 50% -10%, rgba(212, 175, 55, 0.15) 0%, transparent 55%),
+      radial-gradient(circle at 100% 100%, rgba(128, 0, 32, 0.18) 0%, transparent 50%),
+      radial-gradient(circle at 0% 100%, rgba(6, 182, 212, 0.12) 0%, transparent 45%),
+      radial-gradient(circle at 50% 50%, rgba(10, 19, 44, 0.8) 0%, #030712 100%);
     background-attachment: fixed;
     color: #FDFBF7;
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow-x: hidden;
   }
 }
 
-/* Luxury Glassmorphism & Gold Borders */
+/* 2030 Futuristic Glassmorphism & Chromatic Gold Borders */
 .gold-card {
-  background: linear-gradient(135deg, rgba(15, 27, 62, 0.85) 0%, rgba(6, 11, 25, 0.95) 100%);
+  background: linear-gradient(135deg, rgba(14, 29, 68, 0.75) 0%, rgba(6, 13, 31, 0.9) 100%);
   border: 1px solid rgba(212, 175, 55, 0.35);
-  box-shadow: 0 10px 35px -5px rgba(0, 0, 0, 0.65), 0 0 15px rgba(212, 175, 55, 0.12);
-  backdrop-filter: blur(16px);
+  box-shadow: 0 15px 45px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .gold-card-active {
-  background: linear-gradient(135deg, rgba(25, 42, 90, 0.9) 0%, rgba(10, 18, 42, 0.98) 100%);
+  background: linear-gradient(135deg, rgba(20, 38, 86, 0.9) 0%, rgba(8, 16, 38, 0.98) 100%);
   border: 2px solid #D4AF37;
-  box-shadow: 0 0 35px rgba(212, 175, 55, 0.4), inset 0 0 20px rgba(212, 175, 55, 0.15);
+  box-shadow: 0 0 40px rgba(212, 175, 55, 0.45), inset 0 0 25px rgba(212, 175, 55, 0.15);
 }
 
+.gold-card-futuristic {
+  background: linear-gradient(145deg, rgba(14, 25, 54, 0.85) 0%, rgba(3, 7, 18, 0.95) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.85), 0 0 30px rgba(212, 175, 55, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(24px);
+  position: relative;
+}
+
+.gold-card-futuristic::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #FFF3A8, transparent);
+}
+
+/* 24K Luxury Gold Button */
 .gold-button {
-  background: linear-gradient(135deg, #FFF3A8 0%, #D4AF37 50%, #9A7B1C 100%);
-  color: #060B19;
-  font-weight: 700;
-  border: 1px solid #FFF3A8;
-  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.35);
-  transition: all 0.25s ease-in-out;
+  background: linear-gradient(135deg, #FFF9D2 0%, #E6C65B 30%, #D4AF37 60%, #9A7B1C 100%);
+  color: #030712;
+  font-weight: 800;
+  letter-spacing: 0.025em;
+  border: 1px solid #FFF9D2;
+  box-shadow: 0 6px 25px rgba(212, 175, 55, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 .gold-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 28px rgba(212, 175, 55, 0.55);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 35px rgba(212, 175, 55, 0.65), 0 0 15px rgba(255, 243, 168, 0.5);
   filter: brightness(1.1);
 }
 
+.gold-button:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Royal Crimson Button */
 .crimson-button {
-  background: linear-gradient(135deg, #A31535 0%, #800020 50%, #4D0013 100%);
+  background: linear-gradient(135deg, #BE123C 0%, #800020 60%, #4C0519 100%);
   color: #FDFBF7;
-  font-weight: 700;
-  border: 1px solid #E63956;
-  box-shadow: 0 4px 20px rgba(128, 0, 32, 0.4);
-  transition: all 0.25s ease-in-out;
+  font-weight: 800;
+  border: 1px solid #FB7185;
+  box-shadow: 0 6px 25px rgba(128, 0, 32, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .crimson-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 28px rgba(128, 0, 32, 0.6);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 35px rgba(225, 29, 72, 0.7);
   filter: brightness(1.15);
 }
 
-/* Broadcast Option Lozenge for Millionaire-Style Reveal */
+/* 2030 Holographic Broadcast Option Lozenge */
 .option-lozenge {
   position: relative;
-  background: linear-gradient(90deg, rgba(13, 27, 62, 0.95) 0%, rgba(6, 11, 25, 0.98) 100%);
-  border: 1.5px solid rgba(212, 175, 55, 0.4);
-  clip-path: polygon(18px 0%, calc(100% - 18px) 0%, 100% 50%, calc(100% - 18px) 100%, 18px 100%, 0% 50%);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  background: linear-gradient(90deg, rgba(14, 29, 68, 0.92) 0%, rgba(6, 13, 31, 0.96) 100%);
+  border: 1.5px solid rgba(212, 175, 55, 0.45);
+  clip-path: polygon(22px 0%, calc(100% - 22px) 0%, 100% 50%, calc(100% - 22px) 100%, 22px 100%, 0% 50%);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
 }
 
 .option-lozenge:hover {
   border-color: #F6E084;
-  box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 0 35px rgba(212, 175, 55, 0.5), inset 0 0 20px rgba(212, 175, 55, 0.15);
+  transform: scale(1.015);
 }
 
 .option-lozenge.correct {
-  background: linear-gradient(90deg, #064E3B 0%, #047857 50%, #064E3B 100%) !important;
+  background: linear-gradient(90deg, #064E3B 0%, #059669 50%, #064E3B 100%) !important;
   border-color: #34D399 !important;
   color: #FFFFFF !important;
-  box-shadow: 0 0 35px rgba(16, 185, 129, 0.6) !important;
+  box-shadow: 0 0 45px rgba(16, 185, 129, 0.7), inset 0 0 30px rgba(52, 211, 153, 0.3) !important;
   animation: pulse-correct 1.5s infinite;
 }
 
 .option-lozenge.wrong {
-  background: linear-gradient(90deg, #7F1D1D 0%, #B91C1C 50%, #7F1D1D 100%) !important;
+  background: linear-gradient(90deg, #7F1D1D 0%, #DC2626 50%, #7F1D1D 100%) !important;
   border-color: #F87171 !important;
   color: #FFFFFF !important;
-  box-shadow: 0 0 35px rgba(239, 68, 68, 0.5) !important;
+  box-shadow: 0 0 45px rgba(239, 68, 68, 0.65), inset 0 0 30px rgba(248, 113, 113, 0.3) !important;
 }
 
 .option-lozenge.eliminated {
-  opacity: 0.15;
-  filter: grayscale(1);
+  opacity: 0.12;
+  filter: grayscale(1) blur(1px);
   pointer-events: none;
+  transform: scale(0.96);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
+/* Animations */
 @keyframes pulse-correct {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.6), inset 0 0 20px rgba(52, 211, 153, 0.2);
   }
   50% {
-    box-shadow: 0 0 45px rgba(16, 185, 129, 0.85);
+    box-shadow: 0 0 60px rgba(16, 185, 129, 0.9), inset 0 0 35px rgba(52, 211, 153, 0.5);
   }
 }
 
-/* Custom Gold Scrollbar */
+@keyframes laser-strike {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+}
+
+@keyframes gold-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+.gold-text-shimmer {
+  background: linear-gradient(90deg, #D4AF37 0%, #FFFDF0 25%, #D4AF37 50%, #9A7B1C 75%, #D4AF37 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: gold-shimmer 4s linear infinite;
+}
+
+/* Audio Visualizer Bars */
+.eq-bar {
+  animation: eq-pulse 1.2s ease-in-out infinite alternate;
+}
+.eq-bar:nth-child(2) { animation-delay: 0.2s; }
+.eq-bar:nth-child(3) { animation-delay: 0.4s; }
+.eq-bar:nth-child(4) { animation-delay: 0.1s; }
+.eq-bar:nth-child(5) { animation-delay: 0.3s; }
+
+@keyframes eq-pulse {
+  0% { height: 4px; }
+  100% { height: 24px; }
+}
+
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #060B19;
+  background: rgba(3, 7, 18, 0.8);
 }
 ::-webkit-scrollbar-thumb {
-  background: #9A7B1C;
-  border-radius: 4px;
+  background: linear-gradient(180deg, #D4AF37 0%, #8A6714 100%);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 243, 168, 0.2);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #D4AF37;
+  background: #F6E084;
 }

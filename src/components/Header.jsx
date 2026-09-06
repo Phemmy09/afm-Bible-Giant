@@ -123,10 +123,10 @@ export default function Header({
           <button
             onClick={onOpenHeritage}
             title="Apostolic Faith Heritage & YDD Pavilion"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-afc-navy-surface via-afc-navy-mid to-afc-navy-surface border border-afc-gold/40 text-afc-gold-light hover:border-afc-gold hover:shadow-gold-glow text-xs font-bold transition-all"
+            className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-afc-navy-surface via-afc-navy-mid to-afc-navy-surface border border-afc-gold/50 text-afc-gold-light hover:border-afc-gold hover:shadow-gold-glow text-xs font-black transition-all cursor-pointer shadow-md hover:scale-105"
           >
-            <img src="/afc/ydd.webp" alt="YDD" className="w-4 h-4 rounded-full" />
-            <span className="hidden md:inline">YDD Heritage</span>
+            <img src="/afc/ydd_logo_hq.png" alt="YDD" className="w-5 h-5 rounded-full bg-white p-0.5" />
+            <span className="hidden md:inline font-serif tracking-wide">YDD Heritage & Gallery</span>
           </button>
 
           {/* Room PIN Badge */}
