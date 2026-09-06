@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Header from './components/Header';
-import AdminController from './components/AdminController';
+import HomePage from './components/HomePage';
 import StageDisplay from './components/StageDisplay';
-import ContestantManager from './components/ContestantManager';
-import GrandPodium from './components/GrandPodium';
-import SoundboardModal from './components/SoundboardModal';
-import QuestionImporterModal from './components/QuestionImporterModal';
+import AdminPortal from './components/AdminPortal';
+import AdminLoginModal, { ADMIN_SESSION_KEY } from './components/AdminLoginModal';
 import HeritageModal from './components/HeritageModal';
-import AuthLockScreen, { AUTH_SESSION_KEY } from './components/AuthLockScreen';
-import PasswordSettingsModal from './components/PasswordSettingsModal';
-import { DEFAULT_QUESTIONS, PRELOADED_EKITI_ZONES } from './data/defaultQuestions';
+import SoundboardModal from './components/SoundboardModal';
+import { DEFAULT_QUESTIONS } from './data/defaultQuestions';
 import { 
   subscribeToGameChannel, 
   DEFAULT_ROOM_CODE, 
@@ -59,21 +56,14 @@ const INITIAL_CONTESTANTS = [
 ];
 
 export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return !!(localStorage.getItem(AUTH_SESSION_KEY) || sessionStorage.getItem(AUTH_SESSION_KEY));
+  const [activeView, setActiveView] = useState('home'); // 'home' | 'stage' | 'admin'
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(() => {
+    return !!sessionStorage.getItem(ADMIN_SESSION_KEY);
   });
-  const [activeView, setActiveView] = useState('admin'); // 'admin' | 'stage' | 'podium'
-  const [roomCode, setRoomCode] = useState(DEFAULT_ROOM_CODE);
-  const [isSoundboardOpen, setIsSoundboardOpen] = useState(false);
-  const [isQuestionManagerOpen, setIsQuestionManagerOpen] = useState(false);
+  const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
   const [isHeritageOpen, setIsHeritageOpen] = useState(false);
-  const [isPasswordSettingsOpen, setIsPasswordSettingsOpen] = useState(false);
-
-  const handleLockApp = () => {
-    localStorage.removeItem(AUTH_SESSION_KEY);
-    sessionStorage.removeItem(AUTH_SESSION_KEY);
-    setIsAuthenticated(false);
-  };
+  const [isSoundboardOpen, setIsSoundboardOpen] = useState(false);
+  const [roomCode, setRoomCode] = useState(DEFAULT_ROOM_CODE);
 
   // Tournament Game State
   const [gameState, setGameState] = useState(() => {
@@ -105,7 +95,6 @@ export default function App() {
     const channel = subscribeToGameChannel(roomCode, (eventData) => {
       console.log('[Supabase Realtime Sync Event Received]:', eventData);
       
-      // Handle synced actions from admin if we are in stage view
       if (eventData.action === 'SYNC_STATE' && eventData.state) {
         setGameState(eventData.state);
       } else if (eventData.action === 'REVEAL_QUESTION') {
@@ -188,7 +177,6 @@ export default function App() {
           if (!prev.timer.running) return prev;
 
           const newTime = prev.timer.timeLeft - 1;
-          // Play tick
           if (newTime > 0 && newTime <= 10) {
             classicalAudio.playTick();
           } else if (newTime === 0) {
@@ -222,7 +210,6 @@ export default function App() {
   const handleUpdateGameState = (updates) => {
     setGameState(prev => {
       const nextState = { ...prev, ...updates };
-      // Broadcast state update to connected stage screens
       handleBroadcastEvent({
         action: 'SYNC_STATE',
         state: nextState
@@ -269,13 +256,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#060B19] text-afc-ivory selection:bg-afc-gold selection:text-afc-navy">
+    <div className="min-h-screen flex flex-col bg-[#030712] text-afc-ivory selection:bg-afc-gold selection:text-afc-navy">
       
-      {/* Master Password Lock Screen Gateway */}
-      {!isAuthenticated && (
-        <AuthLockScreen onAuthenticated={() => setIsAuthenticated(true)} />
-      )}
-
       {/* Top Navigation Bar */}
       <Header
         activeView={activeView}
@@ -283,45 +265,42 @@ export default function App() {
         roomCode={roomCode}
         onOpenSoundboard={() => setIsSoundboardOpen(true)}
         onOpenHeritage={() => setIsHeritageOpen(true)}
-        onLockApp={handleLockApp}
-        onOpenPasswordSettings={() => setIsPasswordSettingsOpen(true)}
+        onOpenAdminLogin={() => setIsAdminLoginOpen(true)}
+        isAdminAuthenticated={isAdminAuthenticated}
       />
 
-      {/* Main Container */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+      {/* Main Content Router */}
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 py-6">
         
-        {/* VIEW 1: QUIZMASTER ADMIN CONTROLLER */}
-        {activeView === 'admin' && (
-          <div className="space-y-6 animate-fade-in">
-            
-            {/* Contestant Management Roster */}
-            <ContestantManager
-              contestants={gameState.contestants}
-              activeContestantId={gameState.activeContestantId}
-              onSetActiveContestant={(id) => handleUpdateGameState({ activeContestantId: id })}
-              onUpdateContestants={(updated) => handleUpdateGameState({ contestants: updated })}
-              onResetScores={handleResetScores}
-            />
-
-            {/* Quizmaster Teleprompter & Live Controls */}
-            <AdminController
-              gameState={gameState}
-              onUpdateGameState={handleUpdateGameState}
-              onBroadcastEvent={handleBroadcastEvent}
-              onOpenQuestionManager={() => setIsQuestionManagerOpen(true)}
-              onOpenPodium={() => setActiveView('podium')}
-            />
-
-          </div>
+        {/* VIEW 1: PUBLIC HOMEPAGE (Landing, Media Gallery, About Heritage, CTAs) */}
+        {activeView === 'home' && (
+          <HomePage
+            onLaunchStage={() => setActiveView('stage')}
+            onOpenAdminLogin={() => {
+              if (isAdminAuthenticated) {
+                setActiveView('admin');
+              } else {
+                setIsAdminLoginOpen(true);
+              }
+            }}
+            onOpenHeritage={() => setIsHeritageOpen(true)}
+          />
         )}
 
-        {/* VIEW 2: STAGE LED DISPLAY */}
+        {/* VIEW 2: LIVE STAGE / PROJECTOR SCREEN (Minimalist, Audience & Projector Display) */}
         {activeView === 'stage' && (
-          <div className="animate-fade-in">
+          <div className="animate-fade-in space-y-4">
             <StageDisplay
               gameState={gameState}
+              onExitToHome={() => setActiveView('home')}
+              onOpenAdmin={() => {
+                if (isAdminAuthenticated) {
+                  setActiveView('admin');
+                } else {
+                  setIsAdminLoginOpen(true);
+                }
+              }}
               onUseLifeline={(lifelineId) => {
-                // Lifeline triggered on stage
                 const updatedContestants = gameState.contestants.map(c => {
                   if (c.id === gameState.activeContestantId) {
                     return {
@@ -340,50 +319,54 @@ export default function App() {
           </div>
         )}
 
-        {/* VIEW 3: GRAND PODIUM & CEREMONY */}
-        {activeView === 'podium' && (
-          <GrandPodium
-            contestants={gameState.contestants}
-            onBackToStage={() => setActiveView('stage')}
-            onResetTournament={handleResetScores}
+        {/* VIEW 3: DEDICATED PASSWORD-PROTECTED ADMIN PORTAL */}
+        {activeView === 'admin' && (
+          <AdminPortal
+            gameState={gameState}
+            onUpdateGameState={handleUpdateGameState}
+            onBroadcastEvent={handleBroadcastEvent}
+            onAddQuestions={handleAddQuestions}
+            onDeleteQuestion={handleDeleteQuestion}
+            onResetToDefaults={handleResetToDefaults}
+            onResetScores={handleResetScores}
+            onExitToHome={() => setActiveView('home')}
+            onLaunchStage={() => setActiveView('stage')}
           />
         )}
 
       </main>
 
-      {/* Footnote acknowledging Headquarters */}
-      <footer className="py-4 border-t border-afc-gold/20 text-center text-xs text-gray-400 bg-afc-navy/80 space-y-1">
+      {/* Footer */}
+      <footer className="py-5 border-t border-afc-gold/20 text-center text-xs text-gray-400 bg-afc-navy/90 space-y-1">
         <p className="font-semibold text-afc-gold-light">
-          The Apostolic Faith Church • Ekiti Area Headquarters: 74 Ajilosun Street, Ado-Ekiti
+          The Apostolic Faith Church • Ekiti Area Headquarters: 74 Ajilosun Street, Ado-Ekiti, Ekiti State
         </p>
-        <p className="text-[11px] text-gray-400">
-          Africa Headquarters: Faith City, Anthony Village / Igbesa, Lagos, Nigeria • International Headquarters: Portland, Oregon, USA
+        <p className="text-[11px] text-gray-500">
+          AFMWECA Youth Development Directorate (YDD) • Faith City Igbesa • Portland Oregon World Headquarters
         </p>
       </footer>
 
-      {/* Modals */}
-      <SoundboardModal
-        isOpen={isSoundboardOpen}
-        onClose={() => setIsSoundboardOpen(false)}
+      {/* Admin Login Modal (Password Gate) */}
+      <AdminLoginModal
+        isOpen={isAdminLoginOpen}
+        onClose={() => setIsAdminLoginOpen(false)}
+        onSuccess={() => {
+          setIsAdminAuthenticated(true);
+          setIsAdminLoginOpen(false);
+          setActiveView('admin');
+        }}
       />
 
-      <QuestionImporterModal
-        isOpen={isQuestionManagerOpen}
-        onClose={() => setIsQuestionManagerOpen(false)}
-        questions={gameState.questions}
-        onAddQuestions={handleAddQuestions}
-        onDeleteQuestion={handleDeleteQuestion}
-        onResetToDefaults={handleResetToDefaults}
-      />
-
+      {/* Heritage & Multimedia Pavilion Modal */}
       <HeritageModal
         isOpen={isHeritageOpen}
         onClose={() => setIsHeritageOpen(false)}
       />
 
-      <PasswordSettingsModal
-        isOpen={isPasswordSettingsOpen}
-        onClose={() => setIsPasswordSettingsOpen(false)}
+      {/* Soundboard Modal */}
+      <SoundboardModal
+        isOpen={isSoundboardOpen}
+        onClose={() => setIsSoundboardOpen(false)}
       />
 
     </div>

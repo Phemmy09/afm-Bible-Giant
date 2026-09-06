@@ -19,7 +19,9 @@ import LifelinesBar from './LifelinesBar';
 
 export default function StageDisplay({ 
   gameState, 
-  onUseLifeline 
+  onUseLifeline,
+  onExitToHome,
+  onOpenAdmin
 }) {
   const {
     currentQuestionIndex,
@@ -173,6 +175,27 @@ export default function StageDisplay({
               <MapPin className="w-3 h-3 text-afc-gold" />
               {activeContestant?.zone}
             </span>
+          </div>
+          {/* Stage Exit / Control Buttons */}
+          <div className="flex items-center gap-1.5 pl-2 border-l border-afc-gold/20">
+            {onExitToHome && (
+              <button
+                onClick={onExitToHome}
+                title="Exit to Home"
+                className="p-2 rounded-xl bg-afc-navy border border-afc-gold/30 text-gray-300 hover:text-white hover:border-afc-gold text-xs transition-colors cursor-pointer"
+              >
+                Exit
+              </button>
+            )}
+            {onOpenAdmin && (
+              <button
+                onClick={onOpenAdmin}
+                title="Open Admin Portal"
+                className="p-2 rounded-xl bg-afc-navy border border-afc-gold/30 text-afc-gold hover:text-white hover:border-afc-gold text-xs transition-colors cursor-pointer"
+              >
+                Admin (🔒)
+              </button>
+            )}
           </div>
         </div>
 
