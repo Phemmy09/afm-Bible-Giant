@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --gold-primary: #D4AF37;
+    --gold-bright: #F6E084;
+    --navy-deep: #060B19;
+    --navy-mid: #0D1B3E;
+    --crimson-deep: #800020;
+  }
+
+  body {
+    background-color: #060B19;
+    background-image: 
+      radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.12) 0%, transparent 60%),
+      radial-gradient(circle at 100% 100%, rgba(128, 0, 32, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 0% 100%, rgba(13, 27, 62, 0.3) 0%, transparent 50%);
+    background-attachment: fixed;
+    color: #FDFBF7;
+    font-family: 'Outfit', sans-serif;
+  }
+}
+
+/* Luxury Glassmorphism & Gold Borders */
+.gold-card {
+  background: linear-gradient(135deg, rgba(15, 27, 62, 0.85) 0%, rgba(6, 11, 25, 0.95) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow: 0 10px 35px -5px rgba(0, 0, 0, 0.65), 0 0 15px rgba(212, 175, 55, 0.12);
+  backdrop-filter: blur(16px);
+}
+
+.gold-card-active {
+  background: linear-gradient(135deg, rgba(25, 42, 90, 0.9) 0%, rgba(10, 18, 42, 0.98) 100%);
+  border: 2px solid #D4AF37;
+  box-shadow: 0 0 35px rgba(212, 175, 55, 0.4), inset 0 0 20px rgba(212, 175, 55, 0.15);
+}
+
+.gold-button {
+  background: linear-gradient(135deg, #FFF3A8 0%, #D4AF37 50%, #9A7B1C 100%);
+  color: #060B19;
+  font-weight: 700;
+  border: 1px solid #FFF3A8;
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.35);
+  transition: all 0.25s ease-in-out;
+}
+
+.gold-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(212, 175, 55, 0.55);
+  filter: brightness(1.1);
+}
+
+.crimson-button {
+  background: linear-gradient(135deg, #A31535 0%, #800020 50%, #4D0013 100%);
+  color: #FDFBF7;
+  font-weight: 700;
+  border: 1px solid #E63956;
+  box-shadow: 0 4px 20px rgba(128, 0, 32, 0.4);
+  transition: all 0.25s ease-in-out;
+}
+
+.crimson-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(128, 0, 32, 0.6);
+  filter: brightness(1.15);
+}
+
+/* Broadcast Option Lozenge for Millionaire-Style Reveal */
+.option-lozenge {
+  position: relative;
+  background: linear-gradient(90deg, rgba(13, 27, 62, 0.95) 0%, rgba(6, 11, 25, 0.98) 100%);
+  border: 1.5px solid rgba(212, 175, 55, 0.4);
+  clip-path: polygon(18px 0%, calc(100% - 18px) 0%, 100% 50%, calc(100% - 18px) 100%, 18px 100%, 0% 50%);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.option-lozenge:hover {
+  border-color: #F6E084;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+}
+
+.option-lozenge.correct {
+  background: linear-gradient(90deg, #064E3B 0%, #047857 50%, #064E3B 100%) !important;
+  border-color: #34D399 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 35px rgba(16, 185, 129, 0.6) !important;
+  animation: pulse-correct 1.5s infinite;
+}
+
+.option-lozenge.wrong {
+  background: linear-gradient(90deg, #7F1D1D 0%, #B91C1C 50%, #7F1D1D 100%) !important;
+  border-color: #F87171 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 35px rgba(239, 68, 68, 0.5) !important;
+}
+
+.option-lozenge.eliminated {
+  opacity: 0.15;
+  filter: grayscale(1);
+  pointer-events: none;
+}
+
+@keyframes pulse-correct {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 45px rgba(16, 185, 129, 0.85);
+  }
+}
+
+/* Custom Gold Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #060B19;
+}
+::-webkit-scrollbar-thumb {
+  background: #9A7B1C;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D4AF37;
+}

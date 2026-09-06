@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF3A8" />
+      <stop offset="35%" stop-color="#D4AF37" />
+      <stop offset="70%" stop-color="#AA820A" />
+      <stop offset="100%" stop-color="#F3DC74" />
+    </linearGradient>
+    <linearGradient id="navyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F1B3E" />
+      <stop offset="100%" stop-color="#060B19" />
+    </linearGradient>
+    <linearGradient id="crimsonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9E1B32" />
+      <stop offset="100%" stop-color="#55000E" />
+    </linearGradient>
+    <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Outer Ring with Gold Border -->
+  <circle cx="250" cy="250" r="236" fill="url(#navyGrad)" stroke="url(#goldGrad)" stroke-width="8" filter="url(#goldGlow)"/>
+  <circle cx="250" cy="250" r="222" fill="none" stroke="url(#goldGrad)" stroke-width="2" stroke-dasharray="6,4"/>
+
+  <!-- Radiant Light Rays (Jesus The Light of the World) -->
+  <g opacity="0.35" stroke="url(#goldGrad)" stroke-width="1.5">
+    <line x1="250" y1="250" x2="250" y2="40"/>
+    <line x1="250" y1="250" x2="398" y2="102"/>
+    <line x1="250" y1="250" x2="460" y2="250"/>
+    <line x1="250" y1="250" x2="398" y2="398"/>
+    <line x1="250" y1="250" x2="250" y2="460"/>
+    <line x1="250" y1="250" x2="102" y2="398"/>
+    <line x1="250" y1="250" x2="40" y2="250"/>
+    <line x1="250" y1="250" x2="102" y2="102"/>
+    <line x1="250" y1="250" x2="325" y2="68"/>
+    <line x1="250" y1="250" x2="432" y2="175"/>
+    <line x1="250" y1="250" x2="432" y2="325"/>
+    <line x1="250" y1="250" x2="325" y2="432"/>
+    <line x1="250" y1="250" x2="175" y2="432"/>
+    <line x1="250" y1="250" x2="68" y2="325"/>
+    <line x1="250" y1="250" x2="68" y2="175"/>
+    <line x1="250" y1="250" x2="175" y2="68"/>
+  </g>
+
+  <!-- Circular Text Path for Motto -->
+  <path id="textCircleTop" d="M 65,250 A 185,185 0 0,1 435,250" fill="none"/>
+  <text font-family="'Cinzel', 'Georgia', serif" font-size="20" font-weight="bold" fill="url(#goldGrad)" letter-spacing="3">
+    <textPath href="#textCircleTop" startOffset="50%" text-anchor="middle">
+      THE APOSTOLIC FAITH CHURCH
+    </textPath>
+  </text>
+
+  <path id="textCircleBottom" d="M 435,250 A 185,185 0 0,1 65,250" fill="none"/>
+  <text font-family="'Outfit', sans-serif" font-size="14" font-weight="700" fill="#F6E084" letter-spacing="3.5">
+    <textPath href="#textCircleBottom" startOffset="50%" text-anchor="middle">
+      ★ JESUS, THE LIGHT OF THE WORLD ★
+    </textPath>
+  </text>
+
+  <!-- Inner Medallion -->
+  <circle cx="250" cy="250" r="145" fill="url(#crimsonGrad)" stroke="url(#goldGrad)" stroke-width="4"/>
+
+  <!-- Stylized Open Bible -->
+  <g transform="translate(160, 185)">
+    <!-- Bible Pages Left & Right -->
+    <path d="M 10,65 Q 45,50 85,55 L 85,10 Q 45,5 10,20 Z" fill="#FDFBF7" stroke="#D4AF37" stroke-width="2"/>
+    <path d="M 170,65 Q 135,50 95,55 L 95,10 Q 135,5 170,20 Z" fill="#FDFBF7" stroke="#D4AF37" stroke-width="2"/>
+    <path d="M 90,12 L 90,62" stroke="#800020" stroke-width="3"/>
+    
+    <!-- Bookmark Ribbon -->
+    <path d="M 90,45 Q 95,75 110,85 L 105,92 L 90,80 L 75,92 L 70,85 Q 85,75 90,45 Z" fill="#D4AF37"/>
+    
+    <!-- Mini Text Lines in Bible -->
+    <line x1="25" y1="28" x2="72" y2="28" stroke="#060B19" stroke-width="2" stroke-linecap="round"/>
+    <line x1="25" y1="38" x2="72" y2="38" stroke="#060B19" stroke-width="2" stroke-linecap="round"/>
+    <line x1="25" y1="48" x2="65" y2="48" stroke="#060B19" stroke-width="2" stroke-linecap="round"/>
+    
+    <line x1="108" y1="28" x2="155" y2="28" stroke="#060B19" stroke-width="2" stroke-linecap="round"/>
+    <line x1="108" y1="38" x2="155" y2="38" stroke="#060B19" stroke-width="2" stroke-linecap="round"/>
+    <line x1="108" y1="48" x2="148" y2="48" stroke="#060B19" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Glowing Cross above Bible -->
+  <g transform="translate(250, 150)">
+    <line x1="0" y1="-28" x2="0" y2="18" stroke="url(#goldGrad)" stroke-width="7" stroke-linecap="round"/>
+    <line x1="-16" y1="-14" x2="16" y2="-14" stroke="url(#goldGrad)" stroke-width="7" stroke-linecap="round"/>
+  </g>
+
+  <!-- Lower Banner: Africa for Christ / Bible Giant -->
+  <g transform="translate(250, 310)">
+    <!-- Golden Scroll Banner -->
+    <path d="M -160,0 L 160,0 L 140,42 L -140,42 Z" fill="url(#goldGrad)" stroke="#55000E" stroke-width="2"/>
+    <polygon points="-160,0 -180,18 -160,35 -165,18" fill="#AA820A"/>
+    <polygon points="160,0 180,18 160,35 165,18" fill="#AA820A"/>
+    
+    <text x="0" y="28" font-family="'Cinzel', serif" font-size="18" font-weight="900" fill="#060B19" text-anchor="middle" letter-spacing="2">
+      BIBLE GIANT
+    </text>
+  </g>
+
+  <!-- Ekiti Area Subtitle -->
+  <text x="250" y="375" font-family="'Outfit', sans-serif" font-size="13" font-weight="700" fill="#FFF3A8" text-anchor="middle" letter-spacing="3">
+    EKITI AREA YOUTH WING
+  </text>
+  <text x="250" y="394" font-family="'Outfit', sans-serif" font-size="10.5" font-weight="500" fill="#D4AF37" text-anchor="middle" letter-spacing="1.5">
+    74 AJILOSUN ST, ADO-EKITI • AFRICA FOR CHRIST
+  </text>
+</svg>
