@@ -9,7 +9,9 @@ import {
   BookOpen, 
   Wifi, 
   HelpCircle,
-  Music
+  Music,
+  Lock,
+  KeyRound
 } from 'lucide-react';
 import classicalAudio from '../services/audioService';
 
@@ -20,7 +22,9 @@ export default function Header({
   connectionStatus = 'connected',
   onOpenSoundboard,
   onOpenHelp,
-  onOpenHeritage
+  onOpenHeritage,
+  onLockApp,
+  onOpenPasswordSettings
 }) {
   const [isMuted, setIsMuted] = useState(false);
 
@@ -116,7 +120,7 @@ export default function Header({
           </button>
         </div>
 
-        {/* Right: Heritage Pavilion, Room Sync, Audio, Fullscreen */}
+        {/* Right: Heritage Pavilion, Security, Room Sync, Audio, Fullscreen */}
         <div className="flex items-center gap-2 sm:gap-3">
           
           {/* YDD Heritage Pavilion Button */}
@@ -140,16 +144,34 @@ export default function Header({
           <button
             onClick={onOpenSoundboard}
             title="Classical Soundboard Controls"
-            className="p-1.5 rounded-lg bg-afc-navy-surface border border-afc-gold/25 text-afc-gold hover:bg-afc-gold/20 transition-colors"
+            className="p-1.5 rounded-lg bg-afc-navy-surface border border-afc-gold/25 text-afc-gold hover:bg-afc-gold/20 transition-colors cursor-pointer"
           >
             <Music className="w-4 h-4" />
+          </button>
+
+          {/* Password Settings Modal Button */}
+          <button
+            onClick={onOpenPasswordSettings}
+            title="Change Tournament Master Password"
+            className="p-1.5 rounded-lg bg-afc-navy-surface border border-afc-gold/25 text-gray-300 hover:text-afc-gold hover:border-afc-gold/50 transition-colors cursor-pointer"
+          >
+            <KeyRound className="w-4 h-4" />
+          </button>
+
+          {/* Quick Lock Button */}
+          <button
+            onClick={onLockApp}
+            title="Lock Tournament Application"
+            className="p-1.5 rounded-lg bg-afc-navy-surface border border-afc-gold/25 text-gray-300 hover:text-rose-400 hover:border-rose-400/40 transition-colors cursor-pointer"
+          >
+            <Lock className="w-4 h-4" />
           </button>
 
           {/* Mute Toggle */}
           <button
             onClick={toggleMute}
             title={isMuted ? "Unmute Classical Audio" : "Mute Classical Audio"}
-            className="p-1.5 rounded-lg bg-afc-navy-surface border border-afc-gold/25 text-gray-300 hover:text-white transition-colors"
+            className="p-1.5 rounded-lg bg-afc-navy-surface border border-afc-gold/25 text-gray-300 hover:text-white transition-colors cursor-pointer"
           >
             {isMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
           </button>
@@ -158,7 +180,7 @@ export default function Header({
           <button
             onClick={toggleFullScreen}
             title="Toggle Stage Fullscreen"
-            className="p-1.5 rounded-lg bg-afc-navy-surface border border-afc-gold/25 text-gray-300 hover:text-afc-gold transition-colors"
+            className="p-1.5 rounded-lg bg-afc-navy-surface border border-afc-gold/25 text-gray-300 hover:text-afc-gold transition-colors cursor-pointer"
           >
             <Maximize className="w-4 h-4" />
           </button>

@@ -7,6 +7,8 @@ import GrandPodium from './components/GrandPodium';
 import SoundboardModal from './components/SoundboardModal';
 import QuestionImporterModal from './components/QuestionImporterModal';
 import HeritageModal from './components/HeritageModal';
+import AuthLockScreen, { AUTH_SESSION_KEY } from './components/AuthLockScreen';
+import PasswordSettingsModal from './components/PasswordSettingsModal';
 import { DEFAULT_QUESTIONS, PRELOADED_EKITI_ZONES } from './data/defaultQuestions';
 import { 
   subscribeToGameChannel, 
@@ -57,11 +59,21 @@ const INITIAL_CONTESTANTS = [
 ];
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return !!(localStorage.getItem(AUTH_SESSION_KEY) || sessionStorage.getItem(AUTH_SESSION_KEY));
+  });
   const [activeView, setActiveView] = useState('admin'); // 'admin' | 'stage' | 'podium'
   const [roomCode, setRoomCode] = useState(DEFAULT_ROOM_CODE);
   const [isSoundboardOpen, setIsSoundboardOpen] = useState(false);
   const [isQuestionManagerOpen, setIsQuestionManagerOpen] = useState(false);
   const [isHeritageOpen, setIsHeritageOpen] = useState(false);
+  const [isPasswordSettingsOpen, setIsPasswordSettingsOpen] = useState(false);
+
+  const handleLockApp = () => {
+    localStorage.removeItem(AUTH_SESSION_KEY);
+    sessionStorage.removeItem(AUTH_SESSION_KEY);
+    setIsAuthenticated(false);
+  };
 
   // Tournament Game State
   const [gameState, setGameState] = useState(() => {
@@ -259,6 +271,11 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-[#060B19] text-afc-ivory selection:bg-afc-gold selection:text-afc-navy">
       
+      {/* Master Password Lock Screen Gateway */}
+      {!isAuthenticated && (
+        <AuthLockScreen onAuthenticated={() => setIsAuthenticated(true)} />
+      )}
+
       {/* Top Navigation Bar */}
       <Header
         activeView={activeView}
@@ -266,6 +283,8 @@ export default function App() {
         roomCode={roomCode}
         onOpenSoundboard={() => setIsSoundboardOpen(true)}
         onOpenHeritage={() => setIsHeritageOpen(true)}
+        onLockApp={handleLockApp}
+        onOpenPasswordSettings={() => setIsPasswordSettingsOpen(true)}
       />
 
       {/* Main Container */}
@@ -360,6 +379,11 @@ export default function App() {
       <HeritageModal
         isOpen={isHeritageOpen}
         onClose={() => setIsHeritageOpen(false)}
+      />
+
+      <PasswordSettingsModal
+        isOpen={isPasswordSettingsOpen}
+        onClose={() => setIsPasswordSettingsOpen(false)}
       />
 
     </div>
