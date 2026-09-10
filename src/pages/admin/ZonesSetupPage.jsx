@@ -1,17 +1,39 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Plus, Trash2, RotateCcw, Users, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, RotateCcw, Users, AlertTriangle, Edit3, Save, X, UserCheck, Shield } from 'lucide-react';
 import { useGameStore } from '@/stores/gameStore';
 import { ZONE_COLORS, VALIDATION } from '@/lib/constants';
 
 export default function ZonesSetupPage() {
-  const { zones, addZone, removeZone, resetAllScores, setTopicLabel, activeRound, resetBoard } = useGameStore();
+  const { zones, addZone, removeZone, resetAllScores, setTopicLabel, activeRound, resetBoard, connectedTeams, updateTeamRoster } = useGameStore();
   const [newZoneName, setNewZoneName] = useState('');
   const [confirmResetScores, setConfirmResetScores] = useState(false);
   const [confirmResetBoard, setConfirmResetBoard] = useState(false);
+  const [editingRosterZoneId, setEditingRosterZoneId] = useState(null);
+  const [rosterForm, setRosterForm] = useState({ player1: '', player2: '', branch: '' });
 
   const activeZones = zones.filter(z => !z.archived);
+
+  const startEditRoster = (zone) => {
+    const team = connectedTeams[zone.id] || {};
+    const players = team.players || [];
+    setEditingRosterZoneId(zone.id);
+    setRosterForm({
+      player1: players[0] || '',
+      player2: players[1] || '',
+      branch: team.branch || '',
+    });
+  };
+
+  const saveRoster = () => {
+    if (!editingRosterZoneId) return;
+    updateTeamRoster(editingRosterZoneId, {
+      players: [rosterForm.player1.trim() || 'Player 1', rosterForm.player2.trim() || 'Player 2'],
+      branch: rosterForm.branch.trim(),
+    });
+    setEditingRosterZoneId(null);
+  };
 
   const handleAddZone = () => {
     if (!newZoneName.trim() || newZoneName.length > VALIDATION.zoneNameMax) return;
@@ -65,30 +87,131 @@ export default function ZonesSetupPage() {
             {/* Zone list */}
             <div className="space-y-2">
               <AnimatePresence>
-                {activeZones.map((zone, i) => (
-                  <motion.div
-                    key={zone.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    className="flex items-center gap-3 py-2 px-3 rounded-lg bg-afc-navy-mid/30"
-                  >
-                    <div
-                      className="w-4 h-4 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: ZONE_COLORS[i % ZONE_COLORS.length].bg }}
-                    />
-                    <span className="font-cinzel text-afc-ivory text-sm font-semibold flex-1">
-                      {zone.name}
-                    </span>
-                    <span className="font-cinzel text-afc-gold text-sm">{zone.score} pts</span>
-                    <button
-                      onClick={() => removeZone(zone.id)}
-                      className="p-1.5 rounded-lg hover:bg-afc-crimson/10 text-afc-ivory-muted/30 hover:text-afc-crimson-light transition-all"
+                {activeZones.map((zone, i) => {
+                  const team = connectedTeams[zone.id] || {};
+                  const players = team.players || [];
+                  const isEditingThis = editingRosterZoneId === zone.id;
+
+                  return (
+                    <motion.div
+                      key={zone.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 20 }}
+                      className="p-3 rounded-xl bg-afc-navy-mid/40 border border-afc-gold/10 space-y-2"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </motion.div>
-                ))}
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="w-4 h-4 rounded-full flex-shrink-0"
+                          style={{ backgroundColor: ZONE_COLORS[i % ZONE_COLORS.length].bg }}
+                        />
+                        <div className="flex-1 min-w-0">
+                          <span className="font-cinzel text-afc-ivory text-sm font-semibold truncate block">
+                            {zone.name}
+                          </span>
+                          {team.branch && (
+                            <span className="font-outfit text-[11px] text-afc-ivory-muted/50 truncate block">
+                              Branch: {team.branch}
+                            </span>
+                          )}
+                        </div>
+                        <span className="font-cinzel text-afc-gold text-sm font-bold">{zone.score} pts</span>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => isEditingThis ? setEditingRosterZoneId(null) : startEditRoster(zone)}
+                            title="Configure Team Representatives"
+                            className="p-1.5 rounded-lg hover:bg-afc-gold/10 text-afc-ivory-muted/40 hover:text-afc-gold transition-all"
+                          >
+                            <Users className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => removeZone(zone.id)}
+                            className="p-1.5 rounded-lg hover:bg-afc-crimson/10 text-afc-ivory-muted/30 hover:text-afc-crimson-light transition-all"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Display Players Tag */}
+                      {players.length > 0 && !isEditingThis && (
+                        <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-white/5">
+                          <span className="text-[10px] font-outfit text-afc-gold uppercase tracking-wider">Reps:</span>
+                          {players.map((p, idx) => (
+                            <span
+                              key={idx}
+                              className="px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-[11px] font-outfit text-afc-ivory/80"
+                            >
+                              {p}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Inline Roster Form */}
+                      <AnimatePresence>
+                        {isEditingThis && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="pt-2 border-t border-afc-gold/20 space-y-2 text-xs"
+                          >
+                            <p className="font-cinzel text-[11px] text-afc-gold font-bold">
+                              Two Named Representatives
+                            </p>
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <label className="block text-[10px] text-afc-ivory-muted/50 mb-0.5">Player 1</label>
+                                <input
+                                  type="text"
+                                  value={rosterForm.player1}
+                                  onChange={(e) => setRosterForm(f => ({ ...f, player1: e.target.value }))}
+                                  placeholder="Bro. Samuel"
+                                  className="w-full bg-afc-navy border border-afc-gold/20 rounded px-2 py-1 text-xs text-white focus:border-afc-gold focus:outline-none"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[10px] text-afc-ivory-muted/50 mb-0.5">Player 2</label>
+                                <input
+                                  type="text"
+                                  value={rosterForm.player2}
+                                  onChange={(e) => setRosterForm(f => ({ ...f, player2: e.target.value }))}
+                                  placeholder="Sis. Deborah"
+                                  className="w-full bg-afc-navy border border-afc-gold/20 rounded px-2 py-1 text-xs text-white focus:border-afc-gold focus:outline-none"
+                                />
+                              </div>
+                            </div>
+                            <div>
+                              <label className="block text-[10px] text-afc-ivory-muted/50 mb-0.5">Local Assembly / Branch</label>
+                              <input
+                                type="text"
+                                value={rosterForm.branch}
+                                onChange={(e) => setRosterForm(f => ({ ...f, branch: e.target.value }))}
+                                placeholder="e.g. Ado Central Assembly"
+                                className="w-full bg-afc-navy border border-afc-gold/20 rounded px-2 py-1 text-xs text-white focus:border-afc-gold focus:outline-none"
+                              />
+                            </div>
+                            <div className="flex gap-2 pt-1">
+                              <button
+                                onClick={saveRoster}
+                                className="px-3 py-1 rounded bg-afc-gold text-afc-navy font-bold text-xs flex items-center gap-1 hover:shadow-md"
+                              >
+                                <Save className="w-3 h-3" /> Save Roster
+                              </button>
+                              <button
+                                onClick={() => setEditingRosterZoneId(null)}
+                                className="px-3 py-1 rounded glass text-afc-ivory-muted/60 text-xs"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  );
+                })}
               </AnimatePresence>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { DEMO_ZONES, DEMO_QUESTIONS, SESSION_PHASES, TILE_STATES, ULTIMATE_CHALLENGE } from '@/lib/constants';
 
 // Generate board tiles from questions
@@ -107,8 +108,10 @@ const initialState = {
   audiencePredictions: [], // [{ audienceId, rankings: [zoneIds] }]
 };
 
-export const useGameStore = create((set, get) => ({
-  ...initialState,
+export const useGameStore = create(
+  persist(
+    (set, get) => ({
+      ...initialState,
 
   // --- Session ---
   setSession: (session) => set({ session }),
@@ -460,11 +463,29 @@ export const useGameStore = create((set, get) => ({
 
   stopQuestionTimer: () => set({ questionTimerRunning: false }),
 
-  registerTeam: (zoneId, players) => {
+  registerTeam: (zoneId, players, branch = '') => {
     set(state => ({
       connectedTeams: {
         ...state.connectedTeams,
-        [zoneId]: { players, connected: true },
+        [zoneId]: {
+          ...(state.connectedTeams[zoneId] || {}),
+          players: Array.isArray(players) ? players : [players],
+          branch: branch || state.connectedTeams[zoneId]?.branch || '',
+          connected: true,
+        },
+      },
+    }));
+  },
+
+  updateTeamRoster: (zoneId, rosterData) => {
+    set(state => ({
+      connectedTeams: {
+        ...state.connectedTeams,
+        [zoneId]: {
+          ...(state.connectedTeams[zoneId] || {}),
+          ...rosterData,
+          connected: true,
+        },
       },
     }));
   },
@@ -581,6 +602,20 @@ export const useGameStore = create((set, get) => ({
     zones: get().zones.map(z => ({ ...z, score: 0 })),
     auditLog: get().auditLog,
   }),
-}));
+}),
+    {
+      name: 'afc_bible_giant_store',
+      partialize: (state) => ({
+        session: state.session,
+        zones: state.zones,
+        activeRound: state.activeRound,
+        questions: state.questions,
+        connectedTeams: state.connectedTeams,
+        soundEnabled: state.soundEnabled,
+        auditLog: state.auditLog,
+      }),
+    }
+  )
+);
 
 export default useGameStore;

@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Trophy, Medal, Award, Crown, Star, Sparkles } from 'lucide-react';
+import { ArrowLeft, Trophy, Medal, Award, Crown, Star, Sparkles, FileText } from 'lucide-react';
 import { useGameStore } from '@/stores/gameStore';
 import { ZONE_COLORS, SESSION_PHASES } from '@/lib/constants';
 import soundEngine from '@/lib/soundEngine';
+import CertificateModal from '@/components/admin/CertificateModal';
 
 export default function GrandPodiumPage() {
+  const [isCertOpen, setIsCertOpen] = useState(false);
   const { zones, podiumReveals, revealNextPodiumRank, resetPodium, setPhase, soundEnabled } = useGameStore();
   const activeZones = zones.filter(z => !z.archived);
   const sortedZones = [...activeZones].sort((a, b) => b.score - a.score);
@@ -69,6 +72,14 @@ export default function GrandPodiumPage() {
                       ? 'All Revealed!'
                       : `Reveal #${activeZones.length - podiumReveals.length} Place`
                   }
+                </button>
+
+                <button
+                  onClick={() => setIsCertOpen(true)}
+                  className="w-full py-3 rounded-xl border border-afc-gold/40 bg-afc-gold/10 text-afc-gold font-cinzel font-semibold text-sm tracking-wider hover:bg-afc-gold/20 hover:border-afc-gold transition-all flex items-center justify-center gap-2"
+                >
+                  <Award className="w-4 h-4" />
+                  Generate Official Certificates
                 </button>
 
                 {podiumReveals.length > 0 && (
@@ -149,6 +160,14 @@ export default function GrandPodiumPage() {
           </div>
         </div>
       </div>
+
+      {/* Certificate Modal */}
+      <CertificateModal
+        isOpen={isCertOpen}
+        onClose={() => setIsCertOpen(false)}
+        zones={zones}
+        reveals={podiumReveals}
+      />
     </div>
   );
 }

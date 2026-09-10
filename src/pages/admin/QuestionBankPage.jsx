@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Plus, Trash2, Edit3, Save, X, BookOpen, Upload } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, Edit3, Save, X, BookOpen, Upload, FileUp } from 'lucide-react';
 import { useGameStore } from '@/stores/gameStore';
 import { QUESTION_TYPES, ROUNDS } from '@/lib/constants';
+import QuestionBulkImportModal from '@/components/admin/QuestionBulkImportModal';
 
 export default function QuestionBankPage() {
   const { questions, addQuestion, updateQuestion, deleteQuestion } = useGameStore();
+  const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState({
@@ -97,12 +99,20 @@ export default function QuestionBankPage() {
             </Link>
             <h1 className="font-cinzel text-xl font-bold text-gold-gradient">Question Bank</h1>
           </div>
-          <button
-            onClick={() => { resetForm(); setIsAdding(true); setEditingId(null); }}
-            className="px-4 py-2 rounded-xl bg-gradient-gold text-afc-navy font-cinzel font-semibold text-sm flex items-center gap-2 hover:shadow-gold-intense transition-all"
-          >
-            <Plus className="w-4 h-4" /> Add Question
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsBulkImportOpen(true)}
+              className="px-3.5 py-2 rounded-xl border border-afc-gold/30 hover:border-afc-gold text-afc-gold font-cinzel text-xs font-semibold flex items-center gap-1.5 transition-all glass"
+            >
+              <FileUp className="w-4 h-4" /> Bulk Import
+            </button>
+            <button
+              onClick={() => { resetForm(); setIsAdding(true); setEditingId(null); }}
+              className="px-4 py-2 rounded-xl bg-gradient-gold text-afc-navy font-cinzel font-semibold text-sm flex items-center gap-2 hover:shadow-gold-intense transition-all"
+            >
+              <Plus className="w-4 h-4" /> Add Question
+            </button>
+          </div>
         </div>
 
         {/* Add/Edit Form */}
@@ -287,6 +297,12 @@ export default function QuestionBankPage() {
           ))}
         </div>
       </div>
+
+      {/* Bulk Question Import Modal */}
+      <QuestionBulkImportModal
+        isOpen={isBulkImportOpen}
+        onClose={() => setIsBulkImportOpen(false)}
+      />
     </div>
   );
 }
