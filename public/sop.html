@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AFC Bible Giant — Simple Step-by-Step Operator Guide (SOP)</title>
+  <style>
+    :root {
+      --primary: #0047BA;
+      --primary-dark: #002B99;
+      --gold: #D4AF37;
+      --gold-light: #FDE047;
+      --bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --border: #E2E8F0;
+      --success: #16A34A;
+      --danger: #DC2626;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    header {
+      text-align: center;
+      border-bottom: 3px solid var(--primary);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: var(--primary-dark);
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    .quick-links {
+      background: #EFF6FF;
+      border: 2px solid #BFDBFE;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 32px;
+    }
+
+    .quick-links h3 {
+      color: var(--primary);
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+
+    .links-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .link-box {
+      background: #FFF;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid #DBEAFE;
+    }
+
+    .link-box strong {
+      display: block;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .link-box a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: bold;
+      word-break: break-all;
+      font-size: 13px;
+    }
+
+    .password-badge {
+      display: inline-block;
+      background: #FEF3C7;
+      border: 1px solid #FDE68A;
+      color: #92400E;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      color: var(--primary-dark);
+      border-left: 4px solid var(--gold);
+      padding-left: 12px;
+      margin: 32px 0 16px 0;
+    }
+
+    .step-card {
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      background: var(--primary);
+      color: #FFF;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .step-content h4 {
+      font-size: 16px;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .step-content p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .btn-example {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      margin: 2px;
+    }
+
+    .btn-green { background: #DCFCE7; color: #166534; border: 1px solid #86EFAC; }
+    .btn-red { background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5; }
+    .btn-blue { background: #DBEAFE; color: #1E40AF; border: 1px solid #93C5FD; }
+    .btn-gold { background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
+
+    .tip-box {
+      background: #F0FDF4;
+      border-left: 4px solid var(--success);
+      padding: 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    .warning-box {
+      background: #FEF2F2;
+      border-left: 4px solid var(--danger);
+      padding: 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      text-align: left;
+    }
+
+    th {
+      background: #F1F5F9;
+      color: var(--text);
+      font-weight: bold;
+    }
+
+    footer.sop-footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <header>
+      <div class="badge">Official Operator Guide</div>
+      <h1>AFC Bible Giant — Simple Step-by-Step Guide</h1>
+      <p class="subtitle">A simple manual for Quiz Masters, Media Handlers & Stage Operators</p>
+    </header>
+
+    <!-- Essential Links -->
+    <div class="quick-links">
+      <h3>🌐 Essential Event Links</h3>
+      <div class="links-grid">
+        <div class="link-box">
+          <strong>🖥️ 1. Projector / Stage Screen (For Audience)</strong>
+          <a href="https://afm-bible-giant.vercel.app/stage" target="_blank">https://afm-bible-giant.vercel.app/stage</a>
+        </div>
+        <div class="link-box">
+          <strong>🎮 2. Admin Control Portal (For Quiz Controller)</strong>
+          <a href="https://afm-bible-giant.vercel.app/admin" target="_blank">https://afm-bible-giant.vercel.app/admin</a>
+        </div>
+      </div>
+      <div style="margin-top: 14px;">
+        <strong>🔑 Admin Master Password:</strong> <span class="password-badge">AFCEKITI2026</span>
+      </div>
+    </div>
+
+    <!-- Section 1: Pre-Event Setup -->
+    <h2 class="section-title">⏱️ 1. Quick Setup Before the Competition Starts</h2>
+
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Set Up Laptop A (Connected to the Projector)</h4>
+        <p>Open <strong>/stage</strong> in Google Chrome on the laptop connected to the projector or TV screen.</p>
+        <p>Press <span class="btn-example btn-blue">F11</span> for Full Screen, and click the yellow <span class="btn-example btn-gold">Enable Sound</span> button once at the top right.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Set Up Laptop B (The Admin / Controller Laptop)</h4>
+        <p>Open <strong>/admin</strong> on the Quiz Master's or Tech Team's laptop.</p>
+        <p>Type password: <span class="password-badge">AFCEKITI2026</span> and click <strong>Access Portal</strong>.</p>
+      </div>
+    </div>
+
+    <!-- Section 2: Running a Question -->
+    <h2 class="section-title">🎯 2. How to Run a Question (Step-by-Step)</h2>
+
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Select the Team Answering</h4>
+        <p>Under <strong>Live Stage</strong>, click on the Zone name (e.g. <span class="btn-example btn-blue">IDO</span>, <span class="btn-example btn-blue">ADO</span>, <span class="btn-example btn-blue">EMURE</span>). Their box will light up in gold on the big screen.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Pick a Question Number</h4>
+        <p>When the contestant picks a tile number (e.g., Tile 4), click on tile <span class="btn-example btn-gold">4</span> on the Admin board. The scripture question opens instantly on the projector scroll.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Start the Participant Timer</h4>
+        <p>As soon as the question is read, click <span class="btn-example btn-blue">▶ Start</span>. The circular countdown ring will appear on the projector screen.</p>
+        <p><em>Need extra time?</em> Click <span class="btn-example btn-blue">+5s</span> or <span class="btn-example btn-blue">+10s</span>.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Judge the Answer</h4>
+        <p>If the contestant answers correctly: Click <span class="btn-example btn-green">✔ CORRECT (+Points)</span>. The score increases and bell rings!</p>
+        <p>If they miss it: Click <span class="btn-example btn-red">✖ INCORRECT</span>. The buzzer plays and the tile marks as answered.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h4>Play Music / Applause</h4>
+        <p>Use the <strong>DJ Soundboard</strong> at the bottom of the page to trigger real audio:</p>
+        <p>
+          <span class="btn-example btn-blue">👏 Audience Clapping</span>
+          <span class="btn-example btn-blue">🙌 Stadium Cheer</span>
+          <span class="btn-example btn-gold">🎻 Mozart / Beethoven</span>
+          <span class="btn-example btn-red">⏹ Stop Audio</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 3: Round 6 (Ultimate Challenge) -->
+    <h2 class="section-title">⚡ 3. How to Run Round 6 (Ultimate Challenge - 60s)</h2>
+
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Select Round 6 & The Competing Zone</h4>
+        <p>Switch to <strong>Round 6 (Ultimate Challenge)</strong>. Click the Zone attempting the challenge.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Start the 60-Second Challenge</h4>
+        <p>Click <span class="btn-example btn-blue">Start 60s Timer</span>. The dramatic suspense heartbeat will play automatically.</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Mark Answers Rapidly</h4>
+        <p>As the contestant answers questions 1 through 10, click <span class="btn-example btn-green">✔ Correct</span> or <span class="btn-example btn-red">✖ Pass/Wrong</span>. The subtotal calculates in real-time (5 points per correct answer, up to 50 pts).</p>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Commit the Score</h4>
+        <p>When the 60 seconds are up, click <span class="btn-example btn-green">Commit & Add Score</span> to lock in their points on the official leaderboard.</p>
+      </div>
+    </div>
+
+    <!-- Section 4: Podium Ceremony -->
+    <h2 class="section-title">🏆 4. Grand Podium Ceremony</h2>
+    <div class="step-card">
+      <div class="step-num">★</div>
+      <div class="step-content">
+        <h4>Reveal the Final Winners</h4>
+        <p>At the end of the competition, click <span class="btn-example btn-gold">🏆 Reveal Grand Podium Ceremony</span> in Admin.</p>
+        <p>The projector will trigger golden confetti, Beethoven's Ode to Joy fanfare, and reveal the <strong>1st, 2nd, and 3rd Place Champions</strong> on the podium!</p>
+      </div>
+    </div>
+
+    <!-- Section 5: Troubleshooting -->
+    <h2 class="section-title">🛠️ 5. Quick Fixes & Troubleshooting</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Issue</th>
+          <th>Quick Solution</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>No sound on the projector</strong></td>
+          <td>Click the yellow <strong>"Enable Sound"</strong> button at the top right of the stage screen.</td>
+        </tr>
+        <tr>
+          <td><strong>Accidental wrong score added</strong></td>
+          <td>Go to the <strong>"Zones Setup"</strong> tab in Admin &rarr; Click <strong>"Adjust Score"</strong> &rarr; Add or subtract points.</td>
+        </tr>
+        <tr>
+          <td><strong>Contestant needs 5 more seconds</strong></td>
+          <td>Click the <strong>+5s</strong> or <strong>+10s</strong> blue button on the live timer control bar.</td>
+        </tr>
+        <tr>
+          <td><strong>Stage screen not full screen</strong></td>
+          <td>Click on the stage browser window and press the <strong>F11</strong> key on your keyboard.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="tip-box">
+      <strong>💡 Golden Rule for the Quiz Controller:</strong> Always pick the Zone &rarr; Pick the Tile Number &rarr; Start Timer &rarr; Click Correct/Incorrect. That's it!
+    </div>
+
+    <footer class="sop-footer">
+      <p>Apostolic Faith Church (AFM WECA) — Ekiti Area Youth Development Department (YDD)</p>
+      <p><em>"Study to shew thyself approved unto God..." — 2 Timothy 2:15</em></p>
+    </footer>
+
+  </div>
+
+</body>
+</html>

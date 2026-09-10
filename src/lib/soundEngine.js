@@ -1,5 +1,5 @@
 // AFC Bible Giant — Symphonic Classical Sound Engine
-// Web Audio API-based cue system with classical/orchestral sounds
+// Web Audio API-based synthesized sound design + authentic orchestral recordings playback
 
 class SoundEngine {
   constructor() {
@@ -9,6 +9,7 @@ class SoundEngine {
     this.gainNode = null;
     this.masterVolume = 0.7;
     this.activeOscillators = new Map();
+    this.currentAudioElement = null;
   }
 
   async init() {
@@ -36,9 +37,51 @@ class SoundEngine {
   setVolume(vol) {
     this.masterVolume = Math.max(0, Math.min(1, vol));
     if (this.gainNode) this.gainNode.gain.value = this.masterVolume;
+    if (this.currentAudioElement) this.currentAudioElement.volume = this.masterVolume;
   }
 
-  // --- Synthesized Sound Cues ---
+  // --- Real Symphonic Audio Track Playback ---
+  playAudioFile(filename, loop = false) {
+    this.stopAudioFile();
+    try {
+      const audio = new Audio(`/audio/${filename}`);
+      audio.volume = this.masterVolume;
+      audio.loop = loop;
+      audio.play().catch(e => console.warn('Audio play prevented:', e));
+      this.currentAudioElement = audio;
+      return audio;
+    } catch (e) {
+      console.warn('Could not load audio file:', filename, e);
+    }
+  }
+
+  stopAudioFile() {
+    if (this.currentAudioElement) {
+      try {
+        this.currentAudioElement.pause();
+        this.currentAudioElement.currentTime = 0;
+      } catch (e) {}
+      this.currentAudioElement = null;
+    }
+  }
+
+  playClassicalTheme(themeName) {
+    const themeMap = {
+      mozart: 'mozart_eine_kleine.ogg',
+      beethoven: 'beethoven_symphony_5.ogg',
+      ode_to_joy: 'beethoven_ode_to_joy.ogg',
+      handel: 'handel_hallelujah.ogg',
+      fireworks: 'handel_fireworks.ogg',
+      rossini: 'rossini_william_tell.ogg',
+      vivaldi: 'vivaldi_summer_storm.ogg',
+      fanfare: 'victory_fanfare.ogg',
+      ceremonial: 'ceremonial_march.ogg',
+    };
+    const file = themeMap[themeName] || 'mozart_eine_kleine.ogg';
+    return this.playAudioFile(file);
+  }
+
+  // --- Synthesized Sound Cues (Zero Asset Dependency Fallback) ---
 
   _playTone(freq, duration, type = 'sine', envelope = {}) {
     if (!this.isEnabled || !this.audioContext) return;
@@ -68,28 +111,32 @@ class SoundEngine {
   }
 
   playCorrectChime() {
-    // Ascending major chord arpeggio (C-E-G-C')
-    const notes = [523.25, 659.25, 783.99, 1046.5];
-    notes.forEach((freq, i) => {
-      setTimeout(() => {
-        this._playTone(freq, 0.4 - i * 0.05, 'sine', {
-          attack: 0.02, decay: 0.05, sustain: 0.5, release: 0.15,
-        });
-      }, i * 80);
-    });
+    // Try real bell first, fallback to synthesized ascending arpeggio
+    const audio = this.playAudioFile('correct_bell.ogg');
+    if (!audio) {
+      const notes = [523.25, 659.25, 783.99, 1046.5];
+      notes.forEach((freq, i) => {
+        setTimeout(() => {
+          this._playTone(freq, 0.4 - i * 0.05, 'sine', {
+            attack: 0.02, decay: 0.05, sustain: 0.5, release: 0.15,
+          });
+        }, i * 80);
+      });
+    }
   }
 
   playIncorrectBuzz() {
-    // Descending minor with slight dissonance
-    this._playTone(220, 0.5, 'sawtooth', { attack: 0.01, decay: 0.1, sustain: 0.3, release: 0.2 });
-    this._playTone(207.65, 0.5, 'sawtooth', { attack: 0.01, decay: 0.1, sustain: 0.2, release: 0.2 });
-    setTimeout(() => {
-      this._playTone(185, 0.3, 'sawtooth', { attack: 0.01, decay: 0.05, sustain: 0.2, release: 0.15 });
-    }, 150);
+    const audio = this.playAudioFile('incorrect_buzz.ogg');
+    if (!audio) {
+      this._playTone(220, 0.5, 'sawtooth', { attack: 0.01, decay: 0.1, sustain: 0.3, release: 0.2 });
+      this._playTone(207.65, 0.5, 'sawtooth', { attack: 0.01, decay: 0.1, sustain: 0.2, release: 0.2 });
+      setTimeout(() => {
+        this._playTone(185, 0.3, 'sawtooth', { attack: 0.01, decay: 0.05, sustain: 0.2, release: 0.15 });
+      }, 150);
+    }
   }
 
   playSuspenseDrone() {
-    // Low sustained pad chord
     const id = 'suspense';
     this.stopCue(id);
     if (!this.isEnabled || !this.audioContext) return;
@@ -113,47 +160,54 @@ class SoundEngine {
   }
 
   playFanfare() {
-    // Triumphant brass-like ascending fanfare
-    const sequence = [
-      { freq: 392, delay: 0, dur: 0.2 },    // G4
-      { freq: 523.25, delay: 120, dur: 0.2 }, // C5
-      { freq: 659.25, delay: 240, dur: 0.2 }, // E5
-      { freq: 783.99, delay: 360, dur: 0.3 }, // G5
-      { freq: 1046.5, delay: 550, dur: 0.6 }, // C6 — hold
-    ];
-    sequence.forEach(({ freq, delay, dur }) => {
-      setTimeout(() => {
-        this._playTone(freq, dur, 'square', { attack: 0.03, decay: 0.05, sustain: 0.5, release: 0.2 });
-        this._playTone(freq * 1.002, dur, 'square', { attack: 0.03, decay: 0.05, sustain: 0.3, release: 0.2 }); // slight detune for richness
-      }, delay);
-    });
+    const audio = this.playAudioFile('victory_fanfare.ogg');
+    if (!audio) {
+      const sequence = [
+        { freq: 392, delay: 0, dur: 0.2 },
+        { freq: 523.25, delay: 120, dur: 0.2 },
+        { freq: 659.25, delay: 240, dur: 0.2 },
+        { freq: 783.99, delay: 360, dur: 0.3 },
+        { freq: 1046.5, delay: 550, dur: 0.6 },
+      ];
+      sequence.forEach(({ freq, delay, dur }) => {
+        setTimeout(() => {
+          this._playTone(freq, dur, 'square', { attack: 0.03, decay: 0.05, sustain: 0.5, release: 0.2 });
+          this._playTone(freq * 1.002, dur, 'square', { attack: 0.03, decay: 0.05, sustain: 0.3, release: 0.2 });
+        }, delay);
+      });
+    }
   }
 
   playApplause() {
-    // Noise-based applause simulation
-    if (!this.isEnabled || !this.audioContext) return;
-    const bufferSize = this.audioContext.sampleRate * 2;
-    const buffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = (Math.random() * 2 - 1) * Math.sin(Math.PI * i / bufferSize);
+    const audio = this.playAudioFile('applause.ogg');
+    if (!audio) {
+      if (!this.isEnabled || !this.audioContext) return;
+      const bufferSize = this.audioContext.sampleRate * 2;
+      const buffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.sin(Math.PI * i / bufferSize);
+      }
+      const source = this.audioContext.createBufferSource();
+      source.buffer = buffer;
+      const filter = this.audioContext.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 3000;
+      filter.Q.value = 0.5;
+      const gain = this.audioContext.createGain();
+      gain.gain.value = 0.2;
+      source.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.gainNode);
+      source.start();
     }
-    const source = this.audioContext.createBufferSource();
-    source.buffer = buffer;
-    const filter = this.audioContext.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.value = 3000;
-    filter.Q.value = 0.5;
-    const gain = this.audioContext.createGain();
-    gain.gain.value = 0.2;
-    source.connect(filter);
-    filter.connect(gain);
-    gain.connect(this.gainNode);
-    source.start();
   }
 
   playMetronomeTick() {
-    this._playTone(1200, 0.05, 'sine', { attack: 0.005, decay: 0.01, sustain: 0.3, release: 0.02 });
+    const audio = this.playAudioFile('clock_tick.ogg');
+    if (!audio) {
+      this._playTone(1200, 0.05, 'sine', { attack: 0.005, decay: 0.01, sustain: 0.3, release: 0.02 });
+    }
   }
 
   playUCTick() {
@@ -161,12 +215,14 @@ class SoundEngine {
   }
 
   playTimerLockThud() {
-    this._playTone(60, 0.4, 'sine', { attack: 0.01, decay: 0.1, sustain: 0.5, release: 0.2 });
-    this._playTone(80, 0.3, 'sine', { attack: 0.01, decay: 0.1, sustain: 0.3, release: 0.15 });
+    const audio = this.playAudioFile('times_up_gong.ogg');
+    if (!audio) {
+      this._playTone(60, 0.4, 'sine', { attack: 0.01, decay: 0.1, sustain: 0.5, release: 0.2 });
+      this._playTone(80, 0.3, 'sine', { attack: 0.01, decay: 0.1, sustain: 0.3, release: 0.15 });
+    }
   }
 
   playWheelSpin() {
-    // Clicking/ratchet sound that accelerates
     let delay = 0;
     for (let i = 0; i < 30; i++) {
       const interval = 50 + i * 8;
@@ -180,39 +236,41 @@ class SoundEngine {
   }
 
   playWheelLand() {
-    // Bell-like tone
     this._playChord([523.25, 659.25, 783.99], 1.0, 'sine', {
       attack: 0.01, decay: 0.2, sustain: 0.4, release: 0.5,
     });
   }
 
   playPodiumDrumRoll() {
-    const id = 'drum_roll';
-    this.stopCue(id);
-    if (!this.isEnabled || !this.audioContext) return;
+    const audio = this.playAudioFile('drumroll.ogg', true);
+    if (!audio) {
+      const id = 'drum_roll';
+      this.stopCue(id);
+      if (!this.isEnabled || !this.audioContext) return;
 
-    const osc = this.audioContext.createOscillator();
-    const gain = this.audioContext.createGain();
-    osc.type = 'triangle';
-    osc.frequency.value = 100;
-    gain.gain.value = 0;
-    osc.connect(gain);
-    gain.connect(this.gainNode);
-    const now = this.audioContext.currentTime;
-    gain.gain.linearRampToValueAtTime(0.3, now + 1);
-    // Tremolo effect
-    const lfo = this.audioContext.createOscillator();
-    const lfoGain = this.audioContext.createGain();
-    lfo.frequency.value = 20;
-    lfoGain.gain.value = 0.15;
-    lfo.connect(lfoGain);
-    lfoGain.connect(gain.gain);
-    lfo.start(now);
-    osc.start(now);
-    this.activeOscillators.set(id, [{ osc, gain }, { osc: lfo, gain: lfoGain }]);
+      const osc = this.audioContext.createOscillator();
+      const gain = this.audioContext.createGain();
+      osc.type = 'triangle';
+      osc.frequency.value = 100;
+      gain.gain.value = 0;
+      osc.connect(gain);
+      gain.connect(this.gainNode);
+      const now = this.audioContext.currentTime;
+      gain.gain.linearRampToValueAtTime(0.3, now + 1);
+      const lfo = this.audioContext.createOscillator();
+      const lfoGain = this.audioContext.createGain();
+      lfo.frequency.value = 20;
+      lfoGain.gain.value = 0.15;
+      lfo.connect(lfoGain);
+      lfoGain.connect(gain.gain);
+      lfo.start(now);
+      osc.start(now);
+      this.activeOscillators.set(id, [{ osc, gain }, { osc: lfo, gain: lfoGain }]);
+    }
   }
 
   playPodiumReveal() {
+    this.stopAudioFile();
     this.stopCue('drum_roll');
     this.playFanfare();
   }
@@ -232,6 +290,7 @@ class SoundEngine {
   }
 
   stopAll() {
+    this.stopAudioFile();
     for (const id of this.activeOscillators.keys()) {
       this.stopCue(id);
     }
