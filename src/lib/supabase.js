@@ -1,18 +1,19 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Default to user's active Supabase project (Project ID: qlqtujyhdbwmftogukh)
+const DEFAULT_SUPABASE_URL = 'https://qlqtujyhdbwmftogukh.supabase.co';
+const DEFAULT_SUPABASE_ANON_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFscXR1anloZGJ3bWZndG9ndWtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkwMjU0NTAsImV4cCI6MjEwNDYwMTQ1MH0.YgFjtwzbv_dK7Hgul1fGuhMkRRkuL2_xKGExK_II7rU';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('Supabase credentials not found. Running in local-only mode.');
-}
+export const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || DEFAULT_SUPABASE_URL;
+export const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY;
 
-export const supabase = supabaseUrl && supabaseAnonKey
-  ? createClient(supabaseUrl, supabaseAnonKey, {
-      realtime: {
-        params: { eventsPerSecond: 40 },
-      },
-    })
-  : null;
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  realtime: {
+    params: {
+      eventsPerSecond: 40,
+    },
+  },
+});
 
 export const isSupabaseConfigured = () => !!supabase;

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useGameStore, calculateSpeedPoints } from '@/stores/gameStore';
 import { ZONE_COLORS } from '@/lib/constants';
+import { initRealtimeSync } from '@/lib/realtimeSync';
 
 export default function TeamClientPage() {
   const [searchParams] = useSearchParams();
@@ -39,6 +40,12 @@ export default function TeamClientPage() {
   const [selectedOption, setSelectedOption] = useState(null);
   const [timeTaken, setTimeTaken] = useState(0);
   const [startTime, setStartTime] = useState(Date.now());
+
+  // Connect to realtime channel
+  useEffect(() => {
+    const cleanup = initRealtimeSync(code || session.sessionCode);
+    return cleanup;
+  }, [code, session.sessionCode]);
 
   // Join handler
   const handleJoin = (e) => {

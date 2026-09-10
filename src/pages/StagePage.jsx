@@ -13,6 +13,7 @@ import GrandPodium from '@/components/stage/GrandPodium';
 import FooterBanner from '@/components/stage/FooterBanner';
 
 import DigitalLiveStage from '@/components/stage/DigitalLiveStage';
+import { initRealtimeSync } from '@/lib/realtimeSync';
 
 export default function StagePage() {
   const session = useGameStore(s => s.session);
@@ -26,6 +27,12 @@ export default function StagePage() {
   const isUC = activeRound?.isUltimateChallenge || activeRound?.roundNumber === 6;
   const isPodium = session.phase === SESSION_PHASES.PODIUM;
   const isDigitalLive = session.engineMode === 'digital_live';
+
+  // Initialize Real-time synchronization
+  useEffect(() => {
+    const cleanup = initRealtimeSync(session.sessionCode);
+    return cleanup;
+  }, [session.sessionCode]);
 
   // Enable sound on first click
   const enableSound = useCallback(async () => {

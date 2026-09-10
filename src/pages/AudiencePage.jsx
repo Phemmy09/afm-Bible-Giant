@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useGameStore } from '@/stores/gameStore';
 import { ZONE_COLORS } from '@/lib/constants';
+import { initRealtimeSync } from '@/lib/realtimeSync';
 
 export default function AudiencePage() {
   const [searchParams] = useSearchParams();
@@ -41,6 +42,12 @@ export default function AudiencePage() {
   const [startTime, setStartTime] = useState(Date.now());
   const [predictedRanks, setPredictedRanks] = useState([]);
   const [predictionSubmitted, setPredictionSubmitted] = useState(false);
+
+  // Connect to realtime channel
+  useEffect(() => {
+    const cleanup = initRealtimeSync(code || session.sessionCode);
+    return cleanup;
+  }, [code, session.sessionCode]);
 
   // Initialize predicted ranks with active zones
   useEffect(() => {
