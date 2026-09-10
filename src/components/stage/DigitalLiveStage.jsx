@@ -158,15 +158,15 @@ export default function DigitalLiveStage() {
           {/* Competing Units Roster Strip */}
           <div className="pt-4 border-t border-afc-gold/15">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-              {activeZones.map(z => {
+              {activeZones.map((z, idx) => {
                 const team = connectedTeams[z.id];
-                const color = ZONE_COLORS[z.id];
+                const color = ZONE_COLORS[idx % ZONE_COLORS.length];
                 return (
                   <div
                     key={z.id}
                     className="p-3 rounded-xl glass border border-white/5 flex flex-col items-center text-center"
                   >
-                    <div className={`w-7 h-7 rounded-lg ${color?.bg || 'bg-afc-gold'} text-afc-navy font-bold text-xs flex items-center justify-center mb-1.5 shadow-md`}>
+                    <div className="w-7 h-7 rounded-lg font-bold text-xs flex items-center justify-center mb-1.5 shadow-md" style={{ backgroundColor: color?.bg || '#C5A44E', color: color?.text || '#060B19' }}>
                       {z.name.charAt(0)}
                     </div>
                     <span className="font-cinzel text-xs font-bold text-white truncate w-full">
@@ -212,18 +212,19 @@ export default function DigitalLiveStage() {
           </div>
 
           <div className="flex items-center gap-2">
-            {activeZones.map(z => {
+            {activeZones.map((z, idx) => {
               const hasAnswered = !!teamSubmissions[z.id];
-              const color = ZONE_COLORS[z.id];
+              const color = ZONE_COLORS[idx % ZONE_COLORS.length];
               return (
                 <div
                   key={z.id}
                   title={`${z.name}: ${hasAnswered ? 'Answered' : 'Thinking...'}`}
                   className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold font-mono transition-all ${
                     hasAnswered
-                      ? `${color?.bg || 'bg-emerald-500'} text-afc-navy scale-110 shadow-lg shadow-emerald-500/30 ring-2 ring-white`
+                      ? 'scale-110 shadow-lg shadow-emerald-500/30 ring-2 ring-white'
                       : 'bg-white/10 text-white/40 border border-white/20'
                   }`}
+                  style={hasAnswered ? { backgroundColor: color?.bg || '#27AE60', color: color?.text || '#060B19' } : {}}
                 >
                   {z.name.charAt(0)}
                 </div>
@@ -296,9 +297,9 @@ export default function DigitalLiveStage() {
 
         {/* Team Response Cards Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-          {activeZones.map(z => {
+          {activeZones.map((z, idx) => {
             const sub = teamSubmissions[z.id];
-            const color = ZONE_COLORS[z.id];
+            const color = ZONE_COLORS[idx % ZONE_COLORS.length];
             const letter = sub ? ['A', 'B', 'C', 'D'][sub.answerIndex] : '-';
 
             return (
@@ -313,7 +314,7 @@ export default function DigitalLiveStage() {
                 }`}
               >
                 <div>
-                  <div className={`w-8 h-8 rounded-xl ${color?.bg || 'bg-afc-gold'} text-afc-navy font-bold text-xs mx-auto flex items-center justify-center mb-2`}>
+                  <div className="w-8 h-8 rounded-xl font-bold text-xs mx-auto flex items-center justify-center mb-2" style={{ backgroundColor: color?.bg || '#C5A44E', color: color?.text || '#060B19' }}>
                     {z.name.charAt(0)}
                   </div>
                   <h4 className="font-cinzel text-xs font-bold text-white truncate">{z.name}</h4>
@@ -364,7 +365,7 @@ export default function DigitalLiveStage() {
         {[...activeZones]
           .sort((a, b) => b.score - a.score)
           .map((z, idx) => {
-            const color = ZONE_COLORS[z.id];
+            const color = ZONE_COLORS[idx % ZONE_COLORS.length];
             return (
               <div
                 key={z.id}

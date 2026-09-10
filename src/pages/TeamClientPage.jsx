@@ -62,7 +62,8 @@ export default function TeamClientPage() {
   }, [currentQuestion?.id]);
 
   const activeZone = zones.find(z => z.id === selectedZoneId);
-  const zoneColor = selectedZoneId ? ZONE_COLORS[selectedZoneId] : null;
+  const zoneIndex = zones.findIndex(z => z.id === selectedZoneId);
+  const zoneColor = zoneIndex >= 0 ? ZONE_COLORS[zoneIndex % ZONE_COLORS.length] : null;
   const mySubmission = selectedZoneId ? teamSubmissions[selectedZoneId] : null;
 
   const handleSelectAnswer = (index) => {
@@ -132,9 +133,9 @@ export default function TeamClientPage() {
                 Select Your Zone / Competing Unit
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {zones.filter(z => !z.archived).map(z => {
+                {zones.filter(z => !z.archived).map((z, idx) => {
                   const isSelected = selectedZoneId === z.id;
-                  const color = ZONE_COLORS[z.id];
+                  const color = ZONE_COLORS[idx % ZONE_COLORS.length];
                   return (
                     <button
                       key={z.id}
@@ -142,9 +143,10 @@ export default function TeamClientPage() {
                       onClick={() => setSelectedZoneId(z.id)}
                       className={`p-3 rounded-xl border text-left transition-all ${
                         isSelected
-                          ? `${color?.bg || 'bg-afc-gold'} text-afc-navy font-bold shadow-md scale-[1.02] border-white`
+                          ? 'font-bold shadow-md scale-[1.02] border-white'
                           : 'bg-white/5 border-afc-gold/20 hover:border-afc-gold/40 text-white'
                       }`}
+                      style={isSelected ? { backgroundColor: color?.bg || '#C5A44E', color: color?.text || '#060B19' } : {}}
                     >
                       <div className="font-cinzel text-xs font-bold truncate">{z.name}</div>
                       <div className="text-[10px] opacity-70 mt-0.5">{z.score} pts</div>
@@ -218,7 +220,7 @@ export default function TeamClientPage() {
       {/* Top Status Bar */}
       <header className="relative z-10 flex items-center justify-between glass-card p-3 rounded-2xl border border-afc-gold/20 mb-4">
         <div className="flex items-center gap-3">
-          <div className={`w-9 h-9 rounded-xl ${zoneColor?.bg || 'bg-afc-gold'} text-afc-navy flex items-center justify-center font-bold text-sm shadow-md`}>
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm shadow-md" style={{ backgroundColor: zoneColor?.bg || '#C5A44E', color: zoneColor?.text || '#060B19' }}>
             {activeZone?.name?.charAt(0)}
           </div>
           <div>

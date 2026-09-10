@@ -332,7 +332,8 @@ export default function AudiencePage() {
             <div className="space-y-2">
               {predictedRanks.map((zoneId, idx) => {
                 const zone = zones.find(z => z.id === zoneId);
-                const color = ZONE_COLORS[zoneId];
+                const zIdx = zones.findIndex(z => z.id === zoneId);
+                const color = ZONE_COLORS[zIdx >= 0 ? zIdx % ZONE_COLORS.length : 0];
                 return (
                   <div
                     key={zoneId}

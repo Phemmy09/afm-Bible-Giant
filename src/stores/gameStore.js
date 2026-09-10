@@ -474,7 +474,9 @@ export const useGameStore = create((set, get) => ({
     const q = state.currentQuestion;
     if (!q) return;
 
-    const isCorrect = q.correctIndex === answerIndex;
+    // Derive correctIndex from correctAnswer letter (A=0, B=1, C=2, D=3)
+    const correctIdx = typeof q.correctIndex === 'number' ? q.correctIndex : ['A','B','C','D'].indexOf(q.correctAnswer);
+    const isCorrect = correctIdx === answerIndex;
     const points = calculateSpeedPoints(isCorrect, timeTakenMs, 20000, 300, 1000);
 
     set(s => ({
@@ -529,7 +531,9 @@ export const useGameStore = create((set, get) => ({
     const q = state.currentQuestion;
     if (!q) return;
 
-    const isCorrect = q.correctIndex === answerIndex;
+    // Derive correctIndex from correctAnswer letter (A=0, B=1, C=2, D=3)
+    const correctIdx = typeof q.correctIndex === 'number' ? q.correctIndex : ['A','B','C','D'].indexOf(q.correctAnswer);
+    const isCorrect = correctIdx === answerIndex;
     const points = calculateSpeedPoints(isCorrect, timeTakenMs, 20000, 300, 1000);
 
     set(s => ({
